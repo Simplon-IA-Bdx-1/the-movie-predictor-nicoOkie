@@ -34,8 +34,8 @@ def findAllQuery(table):
 def insertPeopleQuery(firstname, lastname):
     return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}')".format(firstname, lastname))
 
-def insertMovieQuery(title, originalTitle, duration):
-    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`) VALUES ('{}', '{}', '{}')".format(title, originalTitle, duration))
+def insertMovieQuery(title, originalTitle, duration, releaseDate, rating):
+    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`, `release_date`, `rating`) VALUES ('{}', '{}', '{}', '{}', '{}')".format(title, originalTitle, duration, releaseDate, rating))
 
 def find(table, id):
     cnx = connectToDatabase()
@@ -65,10 +65,10 @@ def insertPeople(firstname, lastname):
     closeCursor(cursor)
     disconnectDatabase(cnx)
 
-def insertMovie(title, originalTitle, duration):
+def insertMovie(title, originalTitle, duration, releaseDate, rating):
     cnx = connectToDatabase()
     cursor = createCursor(cnx)
-    query = insertMovieQuery(title, originalTitle, duration)
+    query = insertMovieQuery(title, originalTitle, duration, releaseDate, rating)
     cursor.execute(query)
     cnx.commit()
     closeCursor(cursor)
@@ -104,7 +104,8 @@ if commandContex == 'movies':
     insert_parser.add_argument('--title', help='Le titre du film', required=True)
     insert_parser.add_argument('--duration', help='La duree du film en minutes', required=True)
     insert_parser.add_argument('--original-title', help='Le titre original du film', required=True)
-    insert_parser.add_argument('--origin-country', help='Le pays d\'origine du film')
+    insert_parser.add_argument('--release-date', help='La date de sortie du film', required=True)
+    insert_parser.add_argument('--rating', help='Limitations de public du film', required=True)
 
 args = parser.parse_args()
 
@@ -147,5 +148,7 @@ if args.context == "movies":
         title = args.title
         originalTitle = args.original_title
         duration = args.duration
-        insertMovie(title, originalTitle, duration)
+        releaseDate = args.release_date
+        rating = args.rating
+        insertMovie(title, originalTitle, duration, releaseDate, rating)
         # print('movie insert')

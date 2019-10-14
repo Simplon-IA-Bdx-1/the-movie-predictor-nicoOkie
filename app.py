@@ -92,6 +92,9 @@ list_parser.add_argument('--export' , help='Chemin du fichier exportÃ©')
 find_parser = action_subparser.add_parser('find', help='Trouve une entitÃ© selon un paramÃ¨tre')
 find_parser.add_argument('id' , help='Identifant Ã  rechercher')
 
+import_parser = action_subparser.add_parser('import', help='Chemin du fichier a importer')
+import_parser.add_argument('--file', help='Le nom du fichier a importer', required=True)
+
 insert_parser = action_subparser.add_parser('insert', help='Insérer des entités du contexte')
 intermediateParser = parser.parse_known_args()
 commandContex = intermediateParser[0].context
@@ -109,8 +112,8 @@ if commandContex == 'movies':
 
 args = parser.parse_args()
 
-# print(args.original_title)
-# exit
+# print(args)
+# exit()
 
 if args.context == "people":
     if args.action == "list":
@@ -151,4 +154,9 @@ if args.context == "movies":
         releaseDate = args.release_date
         rating = args.rating
         insertMovie(title, originalTitle, duration, releaseDate, rating)
-        # print('movie insert')
+    if args.action == "import":
+        csvFile = args.file
+        with open(csvFile, newline='') as csvfile:
+            reader = csv.DictReader(csvfile, delimiter=',')
+            for row in reader:
+                insertMovie(row['title'], row['original_title'], row['duration'], row['release_date'], row['rating'])

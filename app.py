@@ -31,6 +31,9 @@ def findQuery(table, id):
 def findAllQuery(table):
     return ("SELECT * FROM {}".format(table))
 
+def insertPeopleQuery(firstname, lastname):
+    return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}')".format(firstname, lastname))
+
 def find(table, id):
     cnx = connectToDatabase()
     cursor = createCursor(cnx)
@@ -49,6 +52,15 @@ def findAll(table):
     closeCursor(cursor)
     disconnectDatabase(cnx)
     return results
+
+def insertPeople(firstname, lastname):
+    cnx = connectToDatabase()
+    cursor = createCursor(cnx)
+    query = insertPeopleQuery(firstname, lastname)
+    cursor.execute(query)
+    cnx.commit()
+    closeCursor(cursor)
+    disconnectDatabase(cnx)
 
 def printPerson(person):
     print("#{}: {} {}".format(person['id'], person['firstname'], person['lastname']))
@@ -69,13 +81,13 @@ find_parser = action_subparser.add_parser('find', help='Trouve une entitÃ© sel
 find_parser.add_argument('id' , help='Identifant Ã  rechercher')
 
 insert_parser = action_subparser.add_parser('insert', help='Insérer des entités du contexte')
+# People Insert
 insert_parser.add_argument('--firstname', help='Un prénom', required=True)
 insert_parser.add_argument('--lastname', help='Un nom de famille', required=True)
 
 args = parser.parse_args()
 
 print(args)
-exit()
 
 if args.context == "people":
     if args.action == "list":
@@ -94,6 +106,10 @@ if args.context == "people":
         people = find("people", peopleId)
         for person in people:
             printPerson(person)
+    if args.action == 'insert':
+        peopleFirstname = args.firstname
+        peopleLastname = args.lastname
+        insertPeople(peopleFirstname, peopleLastname)
 
 if args.context == "movies":
     if args.action == "list":  

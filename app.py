@@ -81,13 +81,23 @@ find_parser = action_subparser.add_parser('find', help='Trouve une entitÃ© sel
 find_parser.add_argument('id' , help='Identifant Ã  rechercher')
 
 insert_parser = action_subparser.add_parser('insert', help='Insérer des entités du contexte')
+intermediateParser = parser.parse_known_args()
+commandContex = intermediateParser[0].context
 # People Insert
-insert_parser.add_argument('--firstname', help='Un prénom', required=True)
-insert_parser.add_argument('--lastname', help='Un nom de famille', required=True)
+if commandContex == 'people':
+    insert_parser.add_argument('--firstname', help='Un prénom', required=True)
+    insert_parser.add_argument('--lastname', help='Un nom de famille', required=True)
+# Movie Insert
+if commandContex == 'movies':
+    insert_parser.add_argument('--title', help='Le titre du film', required=True)
+    insert_parser.add_argument('--duration', help='La duree du film en minutes', required=True)
+    insert_parser.add_argument('--original-title', help='Le titre original du film', required=True)
+    insert_parser.add_argument('--origin-country', help='Le pays d\'origine du film')
 
 args = parser.parse_args()
 
 print(args)
+exit
 
 if args.context == "people":
     if args.action == "list":

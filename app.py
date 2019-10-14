@@ -68,7 +68,14 @@ list_parser.add_argument('--export' , help='Chemin du fichier exportÃ©')
 find_parser = action_subparser.add_parser('find', help='Trouve une entitÃ© selon un paramÃ¨tre')
 find_parser.add_argument('id' , help='Identifant Ã  rechercher')
 
+insert_parser = action_subparser.add_parser('insert', help='Insérer des entités du contexte')
+insert_parser.add_argument('--firstname', help='Un prénom', required=True)
+insert_parser.add_argument('--lastname', help='Un nom de famille', required=True)
+
 args = parser.parse_args()
+
+print(args)
+exit()
 
 if args.context == "people":
     if args.action == "list":

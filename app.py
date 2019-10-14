@@ -34,6 +34,9 @@ def findAllQuery(table):
 def insertPeopleQuery(firstname, lastname):
     return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}')".format(firstname, lastname))
 
+def insertMovieQuery(title, originalTitle, duration):
+    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`) VALUES ('{}', '{}', '{}')".format(title, originalTitle, duration))
+
 def find(table, id):
     cnx = connectToDatabase()
     cursor = createCursor(cnx)
@@ -57,6 +60,15 @@ def insertPeople(firstname, lastname):
     cnx = connectToDatabase()
     cursor = createCursor(cnx)
     query = insertPeopleQuery(firstname, lastname)
+    cursor.execute(query)
+    cnx.commit()
+    closeCursor(cursor)
+    disconnectDatabase(cnx)
+
+def insertMovie(title, originalTitle, duration):
+    cnx = connectToDatabase()
+    cursor = createCursor(cnx)
+    query = insertMovieQuery(title, originalTitle, duration)
     cursor.execute(query)
     cnx.commit()
     closeCursor(cursor)
@@ -96,8 +108,8 @@ if commandContex == 'movies':
 
 args = parser.parse_args()
 
-print(args)
-exit
+# print(args.original_title)
+# exit
 
 if args.context == "people":
     if args.action == "list":
@@ -131,3 +143,9 @@ if args.context == "movies":
         movies = find("movies", movieId)
         for movie in movies:
             printMovie(movie)
+    if args.action == "insert":
+        title = args.title
+        originalTitle = args.original_title
+        duration = args.duration
+        insertMovie(title, originalTitle, duration)
+        # print('movie insert')

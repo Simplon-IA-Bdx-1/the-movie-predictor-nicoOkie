@@ -34,8 +34,8 @@ def find_all_query(table):
 def insert_people_query(firstname, lastname):
     return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}');".format(firstname, lastname))
 
-def insertMovieQuery(title, originalTitle, duration, releaseDate, rating):
-    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`, `release_date`, `rating`) VALUES ('{}', '{}', {}, '{}', '{}')".format(title, originalTitle, duration, releaseDate, rating))
+def insert_movie_query(title, original_title, duration, release_date, rating):
+    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`, `release_date`, `rating`) VALUES ('{}', '{}', {}, '{}', '{}')".format(title, original_title, duration, release_date, rating))
 
 def find(table, id):
     cnx = connect_to_database()
@@ -65,10 +65,10 @@ def insert_people(firstname, lastname):
     close_cursor(cursor)
     disconnect_database(cnx)
 
-def insertMovie(title, originalTitle, duration, releaseDate, rating):
+def insert_movie(title, original_title, duration, release_date, rating):
     cnx = connect_to_database()
     cursor = create_cursor(cnx)
-    query = insertMovieQuery(title, originalTitle, duration, releaseDate, rating)
+    query = insert_movie_query(title, original_title, duration, release_date, rating)
     cursor.execute(query)
     cnx.commit()
     close_cursor(cursor)
@@ -150,14 +150,14 @@ if args.context == "movies":
             print_movie(movie)
     if args.action == "insert":
         title = args.title
-        originalTitle = args.original_title
+        original_title = args.original_title
         duration = args.duration
-        releaseDate = args.release_date
+        release_date = args.release_date
         rating = args.rating
-        insertMovie(title, originalTitle, duration, releaseDate, rating)
+        insert_movie(title, original_title, duration, release_date, rating)
     if args.action == "import":
         csvFile = args.file
         with open(csvFile, newline='') as csvfile:
             reader = csv.DictReader(csvfile, delimiter=',')
             for row in reader:
-                insertMovie(row['title'], row['original_title'], row['duration'], row['release_date'], row['rating'])
+                insert_movie(row['title'], row['original_title'], row['duration'], row['release_date'], row['rating'])

@@ -11,61 +11,61 @@ import sys
 import argparse
 import csv
 
-def connectToDatabase():
+def connect_to_database():
     return mysql.connector.connect(user='predictor', password='predictor',
                               host='127.0.0.1',
                               database='predictor')
 
-def disconnectDatabase(cnx):
+def disconnect_database(cnx):
     cnx.close()
 
-def createCursor(cnx):
+def create_cursor(cnx):
     return cnx.cursor(dictionary=True)
 
-def closeCursor(cursor):    
+def close_cursor(cursor):    
     cursor.close()
 
-def findQuery(table, id):
-    return ("SELECT * FROM {} WHERE id = {}".format(table, id))
+def find_query(table, id):
+    return ("SELECT * FROM {} WHERE id = {};".format(table, id))
 
-def findAllQuery(table):
-    return ("SELECT * FROM {}".format(table))
+def find_all_query(table):
+    return ("SELECT * FROM {};".format(table))
 
-def insertPeopleQuery(firstname, lastname):
-    return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}')".format(firstname, lastname))
+def insert_people_query(firstname, lastname):
+    return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}');".format(firstname, lastname))
 
 def find(table, id):
-    cnx = connectToDatabase()
-    cursor = createCursor(cnx)
-    query = findQuery(table, id)
+    cnx = connect_to_database()
+    cursor = create_cursor(cnx)
+    query = find_query(table, id)
     cursor.execute(query)
     results = cursor.fetchall()
-    closeCursor(cursor)
-    disconnectDatabase(cnx)
+    close_cursor(cursor)
+    disconnect_database(cnx)
     return results
 
-def findAll(table):
-    cnx = connectToDatabase()
-    cursor = createCursor(cnx)
-    cursor.execute(findAllQuery(table))
+def find_all(table):
+    cnx = connect_to_database()
+    cursor = create_cursor(cnx)
+    cursor.execute(find_all_query(table))
     results = cursor.fetchall()
-    closeCursor(cursor)
-    disconnectDatabase(cnx)
+    close_cursor(cursor)
+    disconnect_database(cnx)
     return results
 
-def insertPeople(firstname, lastname):
-    cnx = connectToDatabase()
-    cursor = createCursor(cnx)
-    query = insertPeopleQuery(firstname, lastname)
+def insert_people(firstname, lastname):
+    cnx = connect_to_database()
+    cursor = create_cursor(cnx)
+    query = insert_people_query(firstname, lastname)
     cursor.execute(query)
     cnx.commit()
-    closeCursor(cursor)
-    disconnectDatabase(cnx)
+    close_cursor(cursor)
+    disconnect_database(cnx)
 
-def printPerson(person):
+def print_person(person):
     print("#{}: {} {}".format(person['id'], person['firstname'], person['lastname']))
 
-def printMovie(movie):
+def print_movie(movie):
     print("#{}: {} released on {}".format(movie['id'], movie['title'], movie['release_date']))
 
 parser = argparse.ArgumentParser(description='Process MoviePredictor data')
@@ -87,11 +87,11 @@ insert_parser.add_argument('--lastname', help='Un nom de famille', required=True
 
 args = parser.parse_args()
 
-print(args)
+# print(args)
 
 if args.context == "people":
     if args.action == "list":
-        people = findAll("people")
+        people = find_all("people")
         if args.export:
             with open(args.export, 'w', encoding='utf-8', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
@@ -100,24 +100,25 @@ if args.context == "people":
                     writer.writerow(person.values())
         else:
             for person in people:
-                printPerson(person)
+                print_person(person)
     if args.action == "find":
         peopleId = args.id
         people = find("people", peopleId)
         for person in people:
-            printPerson(person)
+            print_person(person)
     if args.action == 'insert':
-        peopleFirstname = args.firstname
-        peopleLastname = args.lastname
-        insertPeople(peopleFirstname, peopleLastname)
+        # peopleFirstname = args.firstname
+        # peopleLastname = args.lastname
+        # insert_people(peopleFirstname, peopleLastname)
+        insert_people(firstname=args.firstname, lastname=args.lastname)
 
 if args.context == "movies":
     if args.action == "list":  
-        movies = findAll("movies")
+        movies = find_all("movies")
         for movie in movies:
-            printMovie(movie)
+            print_movie(movie)
     if args.action == "find":  
         movieId = args.id
         movies = find("movies", movieId)
         for movie in movies:
-            printMovie(movie)
+            print_movie(movie)

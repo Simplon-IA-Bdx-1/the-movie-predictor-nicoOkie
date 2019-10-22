@@ -12,14 +12,22 @@ soup = bs4.BeautifulSoup(page.content, 'html.parser')
 def get_title():
     return soup.find('h1').get_text()
 
+def get_lis():
+    return soup.find_all('li')
+
 def get_original_title():
-    lis = soup.find_all('li')
+    lis = get_lis()
     for li in lis:
         if 'Titre original' in li.contents[0]:
-             return li.contents[1].contents[0].contents[0]
+             return li.contents[1].contents[0].get_text()
 
 # def get_duration():
 
-# def get_release_date():
+def get_release_date():
+    lis = get_lis()
+    for li in lis:
+        if 'Date de sortie' in li.contents[0]:
+            ul = li.contents[1]
+            return ul.contents[0].find('time')['datetime']
 
 # def get_rating():

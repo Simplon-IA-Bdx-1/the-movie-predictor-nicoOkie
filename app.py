@@ -35,7 +35,7 @@ def insertPeopleQuery(firstname, lastname):
     return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}')".format(firstname, lastname))
 
 def insertMovieQuery(title, originalTitle, duration, releaseDate, rating):
-    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`, `release_date`, `rating`) VALUES ('{}', '{}', '{}', '{}', '{}')".format(title, originalTitle, duration, releaseDate, rating))
+    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`, `release_date`, `rating`) VALUES ('{}', '{}', {}, '{}', '{}')".format(title, originalTitle, duration, releaseDate, rating))
 
 def find(table, id):
     cnx = connectToDatabase()
@@ -82,7 +82,7 @@ def printMovie(movie):
 
 parser = argparse.ArgumentParser(description='Process MoviePredictor data')
 
-parser.add_argument('context', choices=['people', 'movies'], help='Le contexte dans lequel nous allons travailler')
+parser.add_argument('context', choices=('people', 'movies'), help='Le contexte dans lequel nous allons travailler')
 
 action_subparser = parser.add_subparsers(title='action', dest='action')
 
@@ -108,7 +108,7 @@ if commandContex == 'movies':
     insert_parser.add_argument('--duration', help='La duree du film en minutes', required=True)
     insert_parser.add_argument('--original-title', help='Le titre original du film', required=True)
     insert_parser.add_argument('--release-date', help='La date de sortie du film', required=True)
-    insert_parser.add_argument('--rating', help='Limitations de public du film', required=True)
+    insert_parser.add_argument('--rating', help='Limitations de public du film', choices=('TP', '-12', '-16', '-18'), required=True)
 
 args = parser.parse_args()
 

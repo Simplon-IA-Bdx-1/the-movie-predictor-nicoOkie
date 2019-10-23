@@ -10,6 +10,7 @@ class Scraper:
                         headers={"Accept-Language": "fr, fr-FR"})
         soup = bs4.BeautifulSoup(page.text, "html.parser")
         self.film_infos = soup.find("div", class_="title_wrapper")
+        self.synopsis = soup.find("div", class_="inline canwrap").find_next("span").get_text().strip()
 
     def get_fr_title(self):
         return self.film_infos.find("h1").contents[0]
@@ -40,4 +41,8 @@ class Scraper:
         if rating_string == "18":
             return "-18"
 
-# print(get_fr_titl e(), get_original_title(), get_release_date(), get_duration(), get_rating())
+    def get_synopsis(self):
+        return self.synopsis
+
+# scraper = Scraper("https://www.imdb.com/title/tt0110912")
+# print(scraper.get_synopsis())

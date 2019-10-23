@@ -84,31 +84,40 @@ parser = argparse.ArgumentParser(description='Process MoviePredictor data')
 
 parser.add_argument('context', choices=('people', 'movies'), help='Le contexte dans lequel nous allons travailler')
 
+intermediateParser = parser.parse_known_args()
+commandContex = intermediateParser[0].context
+
 action_subparser = parser.add_subparsers(title='action', dest='action')
 
+# List
 list_parser = action_subparser.add_parser('list', help='Liste les entitÃ©es du contexte')
 list_parser.add_argument('--export' , help='Chemin du fichier exportÃ©')
 
+# Find
 find_parser = action_subparser.add_parser('find', help='Trouve une entitÃ© selon un paramÃ¨tre')
 find_parser.add_argument('id' , help='Identifant Ã  rechercher')
 
+# Import
 import_parser = action_subparser.add_parser('import', help='Chemin du fichier a importer')
 import_parser.add_argument('--file', help='Le nom du fichier a importer', required=True)
 
+# Insert
 insert_parser = action_subparser.add_parser('insert', help='Insérer des entités du contexte')
-intermediateParser = parser.parse_known_args()
-commandContex = intermediateParser[0].context
-# People Insert
+# People
 if commandContex == 'people':
     insert_parser.add_argument('--firstname', help='Un prénom', required=True)
     insert_parser.add_argument('--lastname', help='Un nom de famille', required=True)
-# Movie Insert
+# Movie
 if commandContex == 'movies':
     insert_parser.add_argument('--title', help='Le titre du film', required=True)
     insert_parser.add_argument('--duration', help='La duree du film en minutes', required=True)
     insert_parser.add_argument('--original-title', help='Le titre original du film', required=True)
     insert_parser.add_argument('--release-date', help='La date de sortie du film', required=True)
     insert_parser.add_argument('--rating', help='Limitations de public du film', choices=('TP', '-12', '-16', '-18'), required=True)
+
+    # Scraper
+    scrap_parser = action_subparser.add_parser('scrap', help='Importer un film depuis une url IMDB')
+    scrap_parser.add_argument('--url', help='L\'url d\'un film sur IMDB', required=True)
 
 args = parser.parse_args()
 
@@ -161,3 +170,5 @@ if args.context == "movies":
             reader = csv.DictReader(csvfile, delimiter=',')
             for row in reader:
                 insert_movie(row['title'], row['original_title'], row['duration'], row['release_date'], row['rating'])
+    # if args.action == "scrap":
+    #     insert_movie(scraper.get_fr_title(), scraper.get_original_title(), scraper.get_duration(), scraper.get_release_date(), scraper.get_rating())

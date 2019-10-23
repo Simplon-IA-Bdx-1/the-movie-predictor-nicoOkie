@@ -10,6 +10,7 @@ import mysql.connector
 import sys
 import argparse
 import csv
+import imdb_scraper
 
 def connect_to_database():
     return mysql.connector.connect(user='predictor', password='predictor',
@@ -170,5 +171,6 @@ if args.context == "movies":
             reader = csv.DictReader(csvfile, delimiter=',')
             for row in reader:
                 insert_movie(row['title'], row['original_title'], row['duration'], row['release_date'], row['rating'])
-    # if args.action == "scrap":
-    #     insert_movie(scraper.get_fr_title(), scraper.get_original_title(), scraper.get_duration(), scraper.get_release_date(), scraper.get_rating())
+    if args.action == "scrap":
+        scraper = imdb_scraper.Scraper(args.url)
+        insert_movie(scraper.get_fr_title(), scraper.get_original_title(), scraper.get_duration(), scraper.get_release_date(), scraper.get_rating())

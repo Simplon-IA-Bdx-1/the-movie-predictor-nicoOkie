@@ -42,7 +42,7 @@ class Scraper:
             return "-18"
 
     def get_synopsis(self):
-        return self.synopsis
+        return self.synopsis.replace("'", '"')
 
 # scraper = Scraper("https://www.imdb.com/title/tt0110912")
 # print(scraper.get_synopsis())

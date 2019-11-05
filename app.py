@@ -35,8 +35,8 @@ def find_all_query(table):
 def insert_people_query(firstname, lastname):
     return ("INSERT INTO  `people` (`firstname`, `lastname`) VALUES  ('{}', '{}');".format(firstname, lastname))
 
-def insert_movie_query(title, original_title, duration, release_date, rating):
-    return ("INSERT INTO `movies` (`title`, `original_title`, `duration`, `release_date`, `rating`) VALUES ('{}', '{}', {}, '{}', '{}')".format(title, original_title, duration, release_date, rating))
+def insert_movie_query(title, original_title, duration, release_date, rating, synopsis="NULL"):
+    return ("INSERT INTO `movies` (`title`, `original_title`, `synopsis`, `duration`, `release_date`, `rating`) VALUES ('{}', '{}', '{}', {}, '{}', '{}')".format(title, original_title, synopsis, duration, release_date, rating))
 
 def find(table, id):
     cnx = connect_to_database()
@@ -66,10 +66,10 @@ def insert_people(firstname, lastname):
     close_cursor(cursor)
     disconnect_database(cnx)
 
-def insert_movie(title, original_title, duration, release_date, rating):
+def insert_movie(title, original_title, duration, release_date, rating, synopsis="Null"):
     cnx = connect_to_database()
     cursor = create_cursor(cnx)
-    query = insert_movie_query(title, original_title, duration, release_date, rating)
+    query = insert_movie_query(title, original_title, duration, release_date, rating, synopsis)
     cursor.execute(query)
     cnx.commit()
     close_cursor(cursor)
@@ -173,4 +173,4 @@ if args.context == "movies":
                 insert_movie(row['title'], row['original_title'], row['duration'], row['release_date'], row['rating'])
     if args.action == "scrap":
         scraper = imdb_scraper.Scraper(args.url)
-        insert_movie(scraper.get_fr_title(), scraper.get_original_title(), scraper.get_duration(), scraper.get_release_date(), scraper.get_rating())
+        insert_movie(scraper.get_fr_title(), scraper.get_original_title(), scraper.get_duration(), scraper.get_release_date(), scraper.get_rating(), scraper.get_synopsis())

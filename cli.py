@@ -29,7 +29,7 @@ The commands are:
 
         getattr(self, args.command)()
 
-    def list(self):
+    def list_entities(self):
         parser = argparse.ArgumentParser(
             description="List the entities in database"
         )

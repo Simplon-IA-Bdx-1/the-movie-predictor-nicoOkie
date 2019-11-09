@@ -1,5 +1,5 @@
 class Role:
 
-    def __init__(self, name):
-        self.id = None
+    def __init__(self, name, id=None):
         self.name = name
+        self.id = id

@@ -1,6 +1,6 @@
 FROM python:3.7-alpine
 
-RUN pip install argparse mysql-connector-python beautifulsoup4 requests
+RUN pip install argparse mysql-connector-python beautifulsoup4 requests flake8
 
 COPY . /usr/src/themoviepredictor
 

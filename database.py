@@ -2,14 +2,15 @@ import os
 import mysql.connector
 
 
-class Database():
-
+class Database:
     def connect_to_database():
-        password = os.environ['MYSQL_PASSWORD']
-        return mysql.connector.connect(user='predictor',
-                                       password=password,
-                                       host='database',
-                                       database='predictor')
+        password = os.environ["MYSQL_PASSWORD"]
+        return mysql.connector.connect(
+            user="predictor",
+            password=password,
+            host="database",
+            database="predictor",
+        )
 
     def disconnect_database(cnx):
         cnx.close()

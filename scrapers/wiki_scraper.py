@@ -7,7 +7,7 @@ import locale
 
 locale.setlocale(locale.LC_ALL, "fr_FR")
 
-page = requests.get('https://fr.wikipedia.org/wiki/Joker_(film,_2019)')
+page = requests.get("https://fr.wikipedia.org/wiki/Joker_(film,_2019)")
 
 soup = bs4.BeautifulSoup(page.text, "html.parser")
 
@@ -20,7 +20,7 @@ for li_tag in li_tags:
     splitted_li = li_tag.get_text().split(":")
     data_type = splitted_li[0].strip()
     data_value = splitted_li[1].strip()
-    
+
     if data_type == "Titre original":
         original_title = data_value
 
@@ -34,19 +34,23 @@ for li_tag in li_tags:
             release_date_country = release_date_splitted[0].strip()
             release_date_as_string = release_date_splitted[1].strip()
             if release_date_country == "France":
-                release_date_object = dt.strptime(release_date_as_string, "%d %B %Y")
-                release_date_sql_string = release_date_object.strftime("%Y-%m-%d")
+                release_date_object = dt.strptime(
+                    release_date_as_string, "%d %B %Y"
+                )
+                release_date_sql_string = release_date_object.strftime(
+                    "%Y-%m-%d"
+                )
 
     if data_type == "Classification":
         rating_li_list = li_tag.find_all("li")
         for rating_li in rating_li_list:
-           rating_splitted = rating_li.get_text().split(":")
-           rating_country =rating_splitted[0].strip()
-           rating_string =rating_splitted[1].strip()
-           if rating_country == "France":
-               if rating_string.find("12") != -1:
-                   rating = "-12"
-            
+            rating_splitted = rating_li.get_text().split(":")
+            rating_country = rating_splitted[0].strip()
+            rating_string = rating_splitted[1].strip()
+            if rating_country == "France":
+                if rating_string.find("12") != -1:
+                    rating = "-12"
+
 
 print("title = ", original_title)
 print("duration = ", duration)
@@ -92,4 +96,3 @@ exit()
 
 
 # get_rating()
-

@@ -1,30 +1,16 @@
 class Movie:
     def __init__(
         self,
-        id=None,
-        imdb_id=None,
-        budget=None,
-        fr_title=None,
-        original_title=None,
-        duration=None,
-        release_date=None,
-        rating=None,
-        synopsis=None,
-        is_3d=None,
-        cast=[],
-        crew={},
-        companies=[],
+        movie
     ):
-        self.id = id
-        self.imdb_id = imdb_id
-        self.budget = budget
-        self.fr_title = fr_title
-        self.original_title = original_title
-        self.duration = duration
-        self.release_date = release_date
-        self.rating = rating
-        self.synopsis = synopsis
-        self.is_3d = is_3d
-        self.cast = cast
-        self.crew = crew
-        self.companies = companies
+        self.id = movie.get("id")
+        self.budget = movie.get("budget")
+        self.imdb_id = movie.get("imdb_id")
+        self.fr_title = movie.get("fr_title")
+        self.original_title = movie.get("original_title")
+        self.duration = movie.get("duration")
+        self.release_date = movie.get("release_date")
+        self.adult = movie.get("adult")
+        self.synopsis = movie.get("synopsis")
+        self.is_3d = movie.get("is_3d")
+        self.score = movie.get("score")

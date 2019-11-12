@@ -9,6 +9,7 @@ services:
     image: nicookie/themoviepredictor:1.0
     env_file:
       - ../auth.env
+      - ../mysql.env
     volumes:
       - ..:/usr/src/themoviepredictor
     networks:

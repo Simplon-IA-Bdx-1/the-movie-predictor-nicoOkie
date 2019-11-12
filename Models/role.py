@@ -1,4 +1,4 @@
 class Role:
-    def __init__(self, name, id=None):
-        self.name = name
-        self.id = id
+    def __init__(self, role):
+        self.name = role.get("name")
+        self.id = role.get("id")

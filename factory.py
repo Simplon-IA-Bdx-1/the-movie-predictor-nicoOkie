@@ -1,4 +1,9 @@
+# Local Imports
 import database
+from Models.movie import Movie
+from Models.people import People
+from Models.company import Company
+from Models.role import Role
 
 db = database.Database()
 
@@ -13,7 +18,7 @@ class Factory:
                                         `synopsis`,
                                         `duration`,
                                         `release_date`,
-                                        `rating`)
+                                        `aduly`)
                                         VALUES (%s,
                                                 %s,
                                                 %s,
@@ -22,7 +27,7 @@ class Factory:
                                                 %s)"""
         data = (movie.fr_title, movie.original_title,
                 movie.synopsis, movie.duration,
-                movie.release_date, movie.rating)
+                movie.release_date, movie.adult)
         return (insert_movie_statement, data)
 
     def insert_people_query(self, person):
@@ -51,6 +56,17 @@ class Factory:
 
     # INSERTION
     @staticmethod
+    def mega_insert(self, entity):
+        if isinstance(entity, Movie):
+            self.insert_movie(entity)
+        if isinstance(entity, People):
+            self.insert_people(entity)
+        if isinstance(entity, Company):
+            self.insert_company(entity)
+        if isinstance(entity, Role):
+            self.insert_role(entity)
+
+    @staticmethod
     def insert_movie_cast_crew_companies(self, movie):
         movie_id = self.insert_movie(movie)
         actor_ids = []
@@ -63,7 +79,6 @@ class Factory:
             crew_ids.append(self.insert_people(member))
         for company in movie.companies:
             company_ids.append(self.insert_company(company))
-
         for actor_id in actor_ids:
             self.insert_movie_people_role(movie_id, actor_id)
 

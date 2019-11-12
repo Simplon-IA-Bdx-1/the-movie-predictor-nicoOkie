@@ -1,18 +1,18 @@
-# """
-# TheMoviePredictor script
-# Author: Arnaud de Mouhy <arnaud@admds.net>
-# """
-# # Modules Imports
+"""
+TheMoviePredictor script
+Author: Arnaud de Mouhy <arnaud@admds.net>
+"""
+# Modules Imports
 # import argparse
 
-# # import csv
-# # import imdb_scraper
+# import csv
+# import imdb_scraper
 
-# # Local Imports
-# # from cli import Parser
+# Local Imports
+from cli import Parser
 # from factory import Factory
 
-# # parser = Parser()
+parser = Parser()
 
 # parser = argparse.ArgumentParser(description="Process MoviePredictor data")
 

@@ -1,7 +1,12 @@
 import argparse
 import sys
+import csv
 
-# import csv
+# Local Imports
+from factoryCopy import Factory
+from Models.movie import Movie
+from MovieFactory import MovieFactory
+from MovieApi.tmdb import TheMovieDb as tmdb
 
 
 class Parser(object):
@@ -31,7 +36,7 @@ The commands are:
 
         getattr(self, args.command)()
 
-    def list_entities(self):
+    def list(self):
         parser = argparse.ArgumentParser(
             description="List the entities in database"
         )
@@ -42,37 +47,33 @@ The commands are:
         )
         args = parser.parse_args(sys.argv[3:])
         if self.context == "people":
-            # people = db.find_all("people")
+            people = Factory.find_all("people")
             if args.export:
-                print("people list export")
-                # with open(args.export,
-                #    'w',
-            #       encoding='utf-8',
-            #    newline='\n') as csvfile:
-            #     writer = csv.writer(csvfile)
-            #     writer.writerow(people[0].keys())
-            #     for person in people:
-            #         writer.writerow(person.values())
+                with open(args.export,
+                          'w',
+                          encoding='utf-8',
+                          newline='\n') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(people[0].keys())
+                    for person in people:
+                        writer.writerow(person.values())
             else:
-                print("people list")
-                # for person in people:
-                #     db.print_person(person)
+                for person in people:
+                    Factory.print_person(person)
         if self.context == "movies":
-            # people = db.find_all("people")
+            movies = Factory.find_all("movies")
             if args.export:
-                print("movies list export")
-                # with open(args.export,
-                #   'w',
-                #   encoding='utf-8',
-                #   newline='\n') as csvfile:
-                #     writer = csv.writer(csvfile)
-                #     writer.writerow(people[0].keys())
-                #     for person in people:
-                #         writer.writerow(person.values())
+                with open(args.export,
+                          'w',
+                          encoding='utf-8',
+                          newline='\n') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(movies[0].keys())
+                    for movie in movies:
+                        writer.writerow(movie.values())
             else:
-                print("movies list")
-                # for person in people:
-                #     db.print_person(person)
+                for movie in movies:
+                    Factory.print_movie(movie)
 
     def find(self):
         parser = argparse.ArgumentParser(description="Find an entity by ID")
@@ -85,14 +86,82 @@ The commands are:
             #     db.print_person(person)
             print(f"find people with id: {args.id}")
         if self.context == "movies":
-            # movie_id = args.id
-            # movies = db.find("movies", movie_id)
-            # for movie in movies:
-            #     db.print_movie(movie)
-            print(f"find movie with id: {args.id}")
+            movie_id = args.id
+            movies = Factory.find("movies", movie_id)
+            for movie in movies:
+                Factory.print_movie(movie)
+
+    def insert(self):
+        parser = argparse.ArgumentParser(
+            description="Insert a new entity in database"
+        )
+        if self.context == "people":
+            parser.add_argument(
+                "--firstname",
+                help="Un prénom",
+                required=True
+            )
+            parser.add_argument(
+                "--lastname",
+                help="Un nom de famille",
+                required=True
+            )
+            args = parser.parse_args(sys.argv[3:])
+        if self.context == "movies":
+            parser.add_argument(
+                "--api",
+                help="Le type d'api a utiliser"
+            )
+            parser.add_argument(
+                "imdb_id",
+                help="The IMDB movie_id"
+            )
+            parser.add_argument(
+                "--title",
+                help="Le titre du film",
+                )
+            parser.add_argument(
+                "--duration",
+                help="La duree du film en minutes",
+                )
+            parser.add_argument(
+                "--original-title",
+                help="Le titre original du film",
+                )
+            parser.add_argument(
+                "--release-date",
+                help="La date de sortie du film",
+                )
+            parser.add_argument(
+                "--rating",
+                help="Limitations de public du film",
+                choices=("TP", "-12", "-16", "-18"),
+                )
+            args = parser.parse_args(sys.argv[3:])
+            if args.api == "tmdb":
+                api = tmdb(args.imdb_id)
+                data = api.get_tmdb_movie()
+                movie = api.make_movie(data)
+                cast = api.make_actor(data)
+                crew = api.make_crew(data)
+                companies = api.make_company(data)
+                movie_data = {
+                    "movie": movie,
+                    "cast": cast,
+                    "crew": crew,
+                    "companies": companies,
+                }
+                Factory.insert_all(movie_data)
+                return print("Get a movie and inserted it")
+            movie = {
+                "fr_title": args.title,
+                "duration": args.duration,
+                "original_title": args.original_title,
+                "release_date": args.release_date,
+                "rating": args.rating,
+            }
+            movie = Movie(movie)
+            print(f"Movie inserted at id: #{MovieFactory.insert_movie(movie)}")
 
     def import_entity(self):
         print("import")
-
-    def insert(self):
-        print("insert")

@@ -1,4 +1,4 @@
 class Company:
-    def __init__(self, name):
-        self.id = None
-        self.name = name
+    def __init__(self, company):
+        self.id = company.get("id")
+        self.name = company.get("name")

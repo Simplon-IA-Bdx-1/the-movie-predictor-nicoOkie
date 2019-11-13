@@ -3,9 +3,9 @@ import sys
 import csv
 
 # Local Imports
-from factoryCopy import Factory
+from Factories.factory import Factory
 from Models.movie import Movie
-from MovieFactory import MovieFactory
+from Factories.MovieFactory import MovieFactory
 from MovieApi.tmdb import TheMovieDb as tmdb
 
 

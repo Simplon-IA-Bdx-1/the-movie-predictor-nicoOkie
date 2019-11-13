@@ -2,10 +2,10 @@
 from Models.movie import Movie
 from Models.people import People
 from Models.company import Company
-from PeopleFactory import PeopleFactory
-from RoleFactory import RoleFactory
-from MovieFactory import MovieFactory
-from CompanyFactory import CompanyFactory
+from Factories.PeopleFactory import PeopleFactory
+from Factories.RoleFactory import RoleFactory
+from Factories.MovieFactory import MovieFactory
+from Factories.CompanyFactory import CompanyFactory
 
 
 class Factory:

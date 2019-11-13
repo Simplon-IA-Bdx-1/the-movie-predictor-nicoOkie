@@ -27,7 +27,7 @@ The commands are:
         parser.add_argument(
             "context",
             help="""The context in
-                                wich the command will be execute""",
+                    wich the command will be execute""",
         )
         parser.add_argument("command", help="The command to run")
         args = parser.parse_args(sys.argv[1:3])

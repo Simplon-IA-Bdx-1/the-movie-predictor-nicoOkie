@@ -1,20 +1,20 @@
 version: '3.7'
 
 services:
-  app:
-    build: 
-      context: ../
-      dockerfile: ./docker/Dockerfile
-    container_name: themoviepredictor_app
-    image: nicookie/themoviepredictor:1.0
-    env_file:
-      - ../auth.env
-      - ../mysql.env
-    volumes:
-      - ..:/usr/src/themoviepredictor
-    networks:
-      - database_net
-    command: tail -f /dev/null
+  # app:
+  #   build: 
+  #     context: ../
+  #     dockerfile: ./docker/Dockerfile
+  #   container_name: themoviepredictor_app
+  #   image: nicookie/themoviepredictor:1.0
+  #   env_file:
+  #     - ../auth.env
+  #     - ../mysql.env
+  #   volumes:
+  #     - ..:/usr/src/themoviepredictor
+  #   networks:
+  #     - database_net
+  #   command: tail -f /dev/null
   database:
     container_name: themoviepredictor_db
     image: mysql:latest

@@ -1,15 +1,17 @@
+from dotenv import load_dotenv
 import os
 import mysql.connector
+
+load_dotenv()
 
 
 class Database:
     @staticmethod
     def connect_to_database():
-        password = os.environ["MYSQL_PASSWORD"]
         return mysql.connector.connect(
             user="predictor",
-            password=password,
-            host="database",
+            password=os.getenv("MYSQL_PASSWORD"),
+            host=os.getenv("MYSQL_HOST", "localhost"),
             database="predictor",
         )
 
